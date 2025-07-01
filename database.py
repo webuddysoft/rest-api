@@ -18,9 +18,9 @@ if DATABASE_URL and DATABASE_URL.startswith("mysql://"):
     
     # Add SSL configuration for Railway MySQL
     if "?" not in DATABASE_URL:
-        DATABASE_URL += "?ssl_ca=/etc/ssl/certs/ca-certificates.crt"
+        DATABASE_URL += "?ssl_verify_cert=false"
     else:
-        DATABASE_URL += "&ssl_ca=/etc/ssl/certs/ca-certificates.crt"
+        DATABASE_URL += "&ssl_verify_cert=false"
 
 # Create SQLAlchemy engine with connection pooling for production
 engine = create_engine(
