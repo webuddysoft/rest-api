@@ -107,14 +107,23 @@ async def create_user(user: UserCreate, db: Session = Depends(get_db)):
         )
 
 @app.get("/users/", response_model=List[UserResponse])
-async def get_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    """Get all users with pagination (no authentication required)"""
+async def get_users(
+    skip: int = 0, 
+    limit: int = 100, 
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """Get all users with pagination - requires authentication"""
     users = crud.get_users(db, skip=skip, limit=limit)
     return users
 
 @app.get("/users/{user_id}", response_model=UserResponse)
-async def get_user(user_id: int, db: Session = Depends(get_db)):
-    """Get a specific user by ID (no authentication required)"""
+async def get_user(
+    user_id: int, 
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """Get a specific user by ID - requires authentication"""
     user = crud.get_user(db, user_id=user_id)
     if user is None:
         raise HTTPException(
