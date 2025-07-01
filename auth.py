@@ -83,12 +83,9 @@ def get_current_user(
         if token_data is None:
             raise credentials_exception
         
-        # Check if token is blacklisted
-        db_token = db.query(Token).filter(
-            Token.token == token,
-            Token.is_active == 0
-        ).first()
-        if db_token:
+        # Check if token exists in database (not deleted)
+        db_token = db.query(Token).filter(Token.token == token).first()
+        if not db_token:
             raise credentials_exception
             
         user = db.query(User).filter(User.username == token_data.username).first()
@@ -106,11 +103,11 @@ def store_token(db: Session, user_id: int, token: str):
     db.refresh(db_token)
     return db_token
 
-def blacklist_token(db: Session, token: str):
-    """Blacklist a token"""
+def delete_token(db: Session, token: str):
+    """Delete a token from the database"""
     db_token = db.query(Token).filter(Token.token == token).first()
     if db_token:
-        db_token.is_active = 0
+        db.delete(db_token)
         db.commit()
         return True
     return False 

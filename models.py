@@ -29,7 +29,6 @@ class Token(Base):
     id = Column(Integer, primary_key=True, index=True)
     token = Column(String(500), unique=True, index=True, nullable=False)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    is_active = Column(Integer, default=1)  # 1 for active, 0 for blacklisted
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     
     # Relationship to user

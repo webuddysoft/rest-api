@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.security import HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
 from typing import List
 import os
@@ -24,7 +25,7 @@ from database import get_db, engine
 from models import Base, User
 from schemas import UserCreate, UserUpdate, UserPatch, UserResponse, UserLogin, Token
 import crud
-from auth import authenticate_user, create_access_token, get_current_user, store_token, blacklist_token, ACCESS_TOKEN_EXPIRE_MINUTES
+from auth import authenticate_user, create_access_token, get_current_user, store_token, delete_token, ACCESS_TOKEN_EXPIRE_MINUTES, security
 
 # Create database tables
 Base.metadata.create_all(bind=engine)
@@ -84,12 +85,13 @@ async def login(user_credentials: UserLogin, db: Session = Depends(get_db)):
 
 @app.post("/auth/logout", status_code=status.HTTP_200_OK)
 async def logout(
+    credentials: HTTPAuthorizationCredentials = Depends(security),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    """Logout and blacklist current token"""
-    # Note: In a real implementation, you'd need to pass the token to blacklist
-    # For now, this endpoint just confirms the user is authenticated
+    """Logout and delete current token"""
+    token = credentials.credentials
+    delete_token(db, token)
     return {"message": "Successfully logged out"}
 
 # User management endpoints
