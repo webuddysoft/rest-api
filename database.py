@@ -3,13 +3,13 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
-# Get database URL from environment variable (Railway MySQL)
-# Railway provides DATABASE_URL for MySQL connections
-DATABASE_URL = os.getenv("DATABASE_URL")
+# Get database URL from environment variables (Railway MySQL)
+# Railway provides multiple MySQL connection variables
+DATABASE_URL = os.getenv("MYSQL_PUBLIC_URL") or os.getenv("DATABASE_URL") or os.getenv("MYSQL_URL")
 
-# If DATABASE_URL is not available, fall back to MYSQL_URL for local development
+# Fallback to default for local development
 if not DATABASE_URL:
-    DATABASE_URL = os.getenv("MYSQL_URL", "mysql+pymysql://user:password@localhost/dbname")
+    DATABASE_URL = "mysql+pymysql://user:password@localhost/dbname"
 
 # For Railway MySQL, we need to handle SSL configuration
 if DATABASE_URL and DATABASE_URL.startswith("mysql://"):

@@ -122,7 +122,8 @@ The API will be available at `http://localhost:8000`
 
 4. **Configure Environment Variables**:
    - In your application service settings, add:
-     - `DATABASE_URL`: The MySQL connection string from step 2
+     - `MYSQL_PUBLIC_URL`: The MySQL connection string from step 2 (preferred)
+     - `DATABASE_URL`: Alternative MySQL connection string
      - `SECRET_KEY`: A secure secret key for JWT signing
 
 5. **Deploy**:
@@ -317,11 +318,12 @@ The API includes comprehensive error handling:
 
 | Variable | Description | Required | Default |
 |----------|-------------|----------|---------|
-| `DATABASE_URL` | MySQL connection string (Railway) | Yes* | - |
+| `MYSQL_PUBLIC_URL` | MySQL connection string (Railway - preferred) | Yes* | - |
+| `DATABASE_URL` | MySQL connection string (Railway - alternative) | Yes* | - |
 | `MYSQL_URL` | MySQL connection string (Local/Vercel) | Yes* | - |
 | `SECRET_KEY` | JWT signing secret key | Yes | "your-secret-key-change-this-in-production" |
 
-*Use `DATABASE_URL` for Railway deployment, `MYSQL_URL` for local development or Vercel deployment.
+*Priority order: `MYSQL_PUBLIC_URL` > `DATABASE_URL` > `MYSQL_URL`. Use `MYSQL_PUBLIC_URL` for Railway deployment, `MYSQL_URL` for local development or Vercel deployment.
 
 ## Security Best Practices
 

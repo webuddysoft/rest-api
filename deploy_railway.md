@@ -26,9 +26,10 @@ Make sure your code is pushed to GitHub with the following files:
    - Go to your application service settings
    - Add these variables:
      ```
-     DATABASE_URL=mysql://username:password@host:port/database
+     MYSQL_PUBLIC_URL=mysql://username:password@host:port/database
      SECRET_KEY=your-super-secure-secret-key-here
      ```
+   - Note: You can also use `DATABASE_URL` as an alternative
 
 6. **Deploy**: Railway will automatically build and deploy your application
 
@@ -60,7 +61,7 @@ curl -X POST "https://your-app-name.railway.app/users/" \
 ### Common Issues
 
 1. **Database Connection Error**:
-   - Ensure `DATABASE_URL` is correctly set
+   - Ensure `MYSQL_PUBLIC_URL` (or `DATABASE_URL`) is correctly set
    - Check that the MySQL service is running
    - Verify SSL configuration in `database.py`
 
@@ -69,7 +70,7 @@ curl -X POST "https://your-app-name.railway.app/users/" \
    - Ensure Python version compatibility
 
 3. **Environment Variables**:
-   - Make sure `DATABASE_URL` and `SECRET_KEY` are set
+   - Make sure `MYSQL_PUBLIC_URL` (or `DATABASE_URL`) and `SECRET_KEY` are set
    - Check for typos in variable names
 
 ### Railway CLI (Optional)
