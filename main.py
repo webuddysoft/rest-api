@@ -10,11 +10,13 @@ from datetime import timedelta
 load_dotenv()
 
 # Debug: Check if environment variable is loaded
+database_url = os.getenv("DATABASE_URL")
 mysql_url = os.getenv("MYSQL_URL")
+print(f"DEBUG: DATABASE_URL = {database_url}")
 print(f"DEBUG: MYSQL_URL = {mysql_url}")
-if not mysql_url:
-    print("WARNING: MYSQL_URL environment variable not found!")
-    print("Make sure you have created a .env file with MYSQL_URL=your_connection_string")
+if not database_url and not mysql_url:
+    print("WARNING: Neither DATABASE_URL nor MYSQL_URL environment variable found!")
+    print("Make sure you have created a .env file with DATABASE_URL=your_connection_string")
 
 from database import get_db, engine
 from models import Base, User

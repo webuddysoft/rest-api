@@ -96,6 +96,52 @@ The API will be available at `http://localhost:8000`
 - **Swagger UI**: `http://localhost:8000/docs`
 - **ReDoc**: `http://localhost:8000/redoc`
 
+## Deployment to Railway
+
+### Prerequisites
+- Railway account
+- MySQL database (Railway provides MySQL service)
+
+### Steps
+
+1. **Connect to Railway**:
+   - Go to [Railway.app](https://railway.app)
+   - Sign up/login with your GitHub account
+   - Create a new project
+
+2. **Add MySQL Database**:
+   - In your Railway project, click "New Service"
+   - Select "Database" → "MySQL"
+   - Railway will automatically create a MySQL database
+   - Copy the `DATABASE_URL` from the MySQL service variables
+
+3. **Deploy Your Application**:
+   - In your Railway project, click "New Service"
+   - Select "GitHub Repo" and connect your repository
+   - Railway will automatically detect it's a Python project
+
+4. **Configure Environment Variables**:
+   - In your application service settings, add:
+     - `DATABASE_URL`: The MySQL connection string from step 2
+     - `SECRET_KEY`: A secure secret key for JWT signing
+
+5. **Deploy**:
+   - Railway will automatically build and deploy your application
+   - The deployment URL will be provided
+
+### Railway Configuration
+
+The project includes:
+- `railway.json`: Railway-specific configuration
+- `Procfile`: Alternative deployment method
+- Updated `database.py`: Configured for Railway MySQL with SSL
+
+### Railway MySQL Features
+- **SSL Connection**: Automatically configured for secure connections
+- **Connection Pooling**: Optimized for production workloads
+- **Auto-scaling**: Railway handles scaling automatically
+- **Backup**: Automatic database backups
+
 ## Deployment to Vercel
 
 ### Prerequisites
@@ -271,8 +317,11 @@ The API includes comprehensive error handling:
 
 | Variable | Description | Required | Default |
 |----------|-------------|----------|---------|
-| `MYSQL_URL` | MySQL connection string | Yes | - |
+| `DATABASE_URL` | MySQL connection string (Railway) | Yes* | - |
+| `MYSQL_URL` | MySQL connection string (Local/Vercel) | Yes* | - |
 | `SECRET_KEY` | JWT signing secret key | Yes | "your-secret-key-change-this-in-production" |
+
+*Use `DATABASE_URL` for Railway deployment, `MYSQL_URL` for local development or Vercel deployment.
 
 ## Security Best Practices
 
